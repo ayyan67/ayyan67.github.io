@@ -138,6 +138,7 @@ h2, .project { scroll-margin-top: 1.5rem; }
         <li><a href="#arc-whisper">arc-whisper</a></li>
         <li><a href="#prayer-reminder">Prayer Reminder</a></li>
         <li><a href="#masha-studios">Masha Studios</a></li>
+        <li><a href="#cryptosim">CryptoSim</a></li>
       </ul>
     </li>
     <li><a href="#smaller">Smaller things</a></li>
@@ -229,9 +230,21 @@ h2, .project { scroll-margin-top: 1.5rem; }
   <p class="links"><a href="https://mashastudios.com">mashastudios.com</a></p>
 </article>
 
+<article class="project" id="cryptosim">
+  <h3>CryptoSim</h3>
+  <p class="what">An iPhone app for paper trading: start with $10,000 of pretend money and trade on live crypto prices.</p>
+  <figure class="phones">
+    <img src="img/cs-1.jpg" width="414" height="900" loading="lazy" alt="Market screen listing coins with live prices and 24-hour change.">
+    <img src="img/cs-2.jpg" width="414" height="900" loading="lazy" alt="Bitcoin detail screen with a one-week price chart and the user’s position.">
+    <img src="img/cs-4.jpg" width="414" height="900" loading="lazy" alt="Portfolio screen showing a $10,005.12 balance, available cash and holdings.">
+  </figure>
+  <p>It started as a university iOS project. I then rebuilt it the way I’d want production code to look: every service is injected through a protocol, so the test suite runs offline in under a second. Network calls have typed errors and a backoff that never retries a rate limit, overlapping refreshes are merged into one, and prices stay on screen when a refresh fails. A debug screen shows p50 and p95 latency and the analytics event stream.</p>
+  <p class="facts">Swift, SwiftUI, SwiftData, async/await, XCTest. Runs without an API key.</p>
+  <p class="links"><a href="https://github.com/ayyan67/cryptosim">Source code</a></p>
+</article>
+
 <h2 id="smaller">Smaller things</h2>
 <ul class="small">
-  <li><a href="https://github.com/ayyan67/cryptosim">CryptoSim</a>. An iPhone paper-trading app on live crypto prices. Started as a university project, then rebuilt with every service behind a protocol so the test suite runs offline in under a second. Swift and SwiftUI.</li>
   <li><a href="https://github.com/ayyan67/arabic-learner">Arabic Learner</a>. Learn the Arabic of the daily prayers word by word, with each word’s root and grammar, spaced repetition and Anki export.</li>
   <li><a href="https://github.com/ayyan67/snapmark">snapmark</a>. A screenshot annotator I wrote twice: first in Tauri and React, then as a native Mac app in Zig with an Objective-C shim. The native one opens in 123 ms instead of 202 ms and uses 76 MB of memory instead of 208 MB.</li>
   <li><a href="https://github.com/ayyan67/ticktick-mcp">ticktick-mcp</a>. An MCP server that lets Claude read and manage my TickTick tasks. I use it every day.</li>
