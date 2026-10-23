@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ayyan Qamer</title>
+<meta name="description" content="Software engineer. Previously iOS on WhatsApp Payments at Meta. Things I've built and shipped.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* One narrow reading column, left-aligned, like a letter. Whitespace separates
+   things; the only boxes are the screenshots, because they are pictures of other screens. */
+:root {
+  --paper: #fcfcfd;
+  --ink: #1b1e24;
+  --muted: #5c6370;
+  --rule: #e2e4e9;
+  --link: #1f45a6;
+  --serif: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #15171b; --ink: #e4e6ea; --muted: #9ba2ae; --rule: #2b2f36; --link: #9db4ff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #15171b; --ink: #e4e6ea; --muted: #9ba2ae; --rule: #2b2f36; --link: #9db4ff;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.62 var(--serif);
+  font-optical-sizing: auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 38rem; margin: 0 auto; padding-block: 4.5rem 3rem; }
+
+a { color: var(--link); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 2px; }
+
+h1, h2, h3 { font-weight: 600; line-height: 1.25; text-wrap: balance; margin: 0; }
+h1 { font-size: 2rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.25rem; margin-top: 4rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+h3 { font-size: 1.25rem; }
+p { margin: 0; }
+
+.intro { display: grid; gap: 1.1rem; }
+.lede { font-size: 1.25rem; line-height: 1.5; }
+.contact { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; }
+
+.project { display: grid; gap: 0.85rem; margin-top: 2.75rem; }
+h2 + .project { margin-top: 1.75rem; }
+.what { color: var(--muted); font-style: italic; }
+.facts { color: var(--muted); font-size: 0.9375rem; }
+.links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; }
+
+figure { margin: 0.35rem 0; }
+.shot { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; }
+.phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.phones img { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 14px; }
+
+.jobs { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 1.25rem; }
+.jobs b { font-weight: 600; }
+.jobs .when { color: var(--muted); font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+
+.small { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 0.9rem; }
+
+footer { margin-top: 4rem; color: var(--muted); font-size: 0.9375rem; }
+
+@media (max-width: 30rem) {
+  main { padding-block: 2.75rem 2rem; }
+  h1 { font-size: 1.75rem; }
+  .lede { font-size: 1.125rem; }
+  .phones { gap: 0.5rem; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<header class="intro">
+  <h1>Ayyan Qamer</h1>
+  <p class="lede">I’m a software engineer. Until May 2026 I built iOS payment features for WhatsApp at Meta. Below are things I’ve built outside my day jobs. Most of them are live.</p>
+  <p class="contact">
+    <a href="mailto:ayyanqamer@gmail.com">ayyanqamer@gmail.com</a>
+    <a href="https://github.com/ayyan67">GitHub</a>
+    <a href="https://www.linkedin.com/in/ayyanqamer">LinkedIn</a>
+    <a href="resume.pdf">Resume (PDF)</a>
+  </p>
+</header>
+
+<h2>Projects</h2>
+
+<article class="project" id="islamic-bank">
+  <h3>Islamic Bank</h3>
+  <p class="what">An economy bot for muslim.chat, a large Muslim community on Discord: wallets, savings, prayer check-ins with streaks, trivia and a shop.</p>
+  <p>It replaced NadekoBot, which the server had used since 2018. I migrated 85,000 users and 383,000 old ledger rows so nobody lost a balance. Every coin movement is an append-only ledger entry, written so that a retried command can’t pay out twice. Since launching in February 2026 it has recorded about 252,000 transactions and 13,000 prayer check-ins. Releases ship from GitHub Actions to a VPS as immutable builds with a one-step rollback and nightly backups.</p>
+  <p class="facts">TypeScript, Seyfert, SQLite, Vitest, GitHub Actions. In production since February 2026, 193 commits.</p>
+  <p class="links"><a href="https://github.com/ayyan67/islamic-bank-bot">Source code</a></p>
+</article>
+
+<article class="project" id="pagerlite">
+  <h3>Pagerlite</h3>
+  <p class="what">An on-call assistant that investigates an outage, proposes a fix, and runs it only after a person approves.</p>
+  <figure><img class="shot" src="img/pagerlite.jpg" width="1400" height="851" alt="Pagerlite asking for approval to roll back a bad deploy of checkout-api, with the tool calls it made shown above and an incident timeline on the right."></figure>
+  <p>The model can read metrics, logs, deploys and feature flags freely, but it can change things through exactly one tool, and that tool waits for a human. An approved fix runs as a durable workflow that applies the change, checks that the service recovers, and reverts on its own if it doesn’t. Resolved incidents are saved as postmortems the agent recalls next time. The servers are simulated, so the demo is safe to click through.</p>
+  <p class="facts">TypeScript, Cloudflare Workers AI (Llama 3.3 70B), Agents SDK, Workflows, Durable Objects. 39 unit tests.</p>
+  <p class="links"><a href="https://pagerlite.ayyanqamer.workers.dev">Try the live demo</a> <a href="https://github.com/ayyan67/pagerlite">Source code</a></p>
+</article>
+
+<article class="project" id="cryptosim">
+  <h3>CryptoSim</h3>
+  <p class="what">An iPhone app for paper trading: start with $10,000 of pretend money and trade on live crypto prices.</p>
+  <figure class="phones">
+    <img src="img/cs-1.jpg" width="414" height="900" loading="lazy" alt="Market screen listing coins with live prices and 24-hour change.">
+    <img src="img/cs-2.jpg" width="414" height="900" loading="lazy" alt="Bitcoin detail screen with a one-week price chart and the user’s position.">
+    <img src="img/cs-4.jpg" width="414" height="900" loading="lazy" alt="Portfolio screen showing a $10,005.12 balance, available cash and holdings.">
+  </figure>
+  <p>I first built it for a university iOS course, then rebuilt it the way I’d want production code to look. Every service is injected through a protocol, so the test suite runs offline in under a second. Network calls have typed errors and backoff that never retries a rate limit, overlapping refreshes are merged into one, and prices stay on screen when a refresh fails. A debug screen shows p50 and p95 latency and the analytics event stream.</p>
+  <p class="facts">Swift, SwiftUI, SwiftData, async/await, XCTest. Runs without an API key.</p>
+  <p class="links"><a href="https://github.com/ayyan67/cryptosim">Source code</a></p>
+</article>
+
+<article class="project" id="masha-studios">
+  <h3>Masha Studios</h3>
+  <p class="what">The online store for my sister’s clothing label. It takes real orders.</p>
+  <figure><img class="shot" src="img/masha.jpg" width="1400" height="851" alt="The Masha Studios home page: the headline “Modest, and effortlessly chic.” next to a photo of a model in a printed two-piece."></figure>
+  <p>There’s no database. Stock for each size is worked out from paid, unrefunded Stripe Checkout sessions, so a webhook delivered twice can’t count a sale twice. The browser only says which items and sizes are in the bag, and the server sets the prices. I verify Stripe’s webhook signatures myself, handle payment methods that settle later such as Klarna and Affirm, and send order emails after replying to Stripe so a slow email can’t trigger a retry.</p>
+  <p class="facts">Next.js, TypeScript, Stripe Checkout, Resend, Vercel.</p>
+  <p class="links"><a href="https://mashastudios.com">mashastudios.com</a> <a href="https://github.com/ayyan67/masha-studios-storefront">Source code</a></p>
+</article>
+
+<article class="project" id="astra">
+  <h3>Astra Medical</h3>
+  <p class="what">A medical-billing startup where I was lead developer from 2023 to 2025.</p>
+  <p>I built the claims pipeline. Claude on AWS Bedrock reads scanned superbills, a biller confirms the extracted fields step by step, and the app generates standard 837P claim files, submits them to the clearinghouse over SFTP, and reads back the status and payment reports. Claims that used to take two weeks went out in under ten minutes. The code belongs to the company, so it isn’t public.</p>
+  <p class="facts">Next.js, TypeScript, Supabase, AWS Bedrock.</p>
+  <p class="links"><a href="https://www.astramedical.co">astramedical.co</a></p>
+</article>
+
+<h2>Smaller things</h2>
+<ul class="small">
+  <li><a href="https://github.com/ayyan67/arabic-learner">Arabic Learner</a>. Learn the Arabic of the daily prayers word by word, with each word’s root and grammar, spaced repetition and Anki export.</li>
+  <li><a href="https://github.com/ayyan67/snapmark">snapmark</a>. A screenshot annotator I wrote twice: first in Tauri and React, then as a native Mac app in Zig with an Objective-C shim.</li>
+  <li><a href="https://github.com/ayyan67/ticktick-mcp">ticktick-mcp</a>. An MCP server that lets Claude read and manage my TickTick tasks. I use it every day.</li>
+  <li><a href="https://github.com/ayyan67/linkedinFilter">linkedinFilter</a>. A userscript that hides reposted, promoted and stale job posts on LinkedIn.</li>
+</ul>
+
+<h2>Work</h2>
+<ul class="jobs">
+  <li>
+    <b>Meta</b>, software engineer on WhatsApp Payments<br>
+    <span class="when">July 2025 to May 2026</span><br>
+    Built a recovery flow for people blocked by transaction limits that rescued more than 11 million stalled payment sessions, and traced two misconfigured feature flags that had hidden payment errors for about 70 million users.
+  </li>
+  <li>
+    <b>Verizon</b>, machine learning engineer intern<br>
+    <span class="when">Summer 2024</span><br>
+    Network coverage models and the Kafka and Spark pipelines feeding them, built on data from 100,000+ cell towers.
+  </li>
+  <li>
+    <b>Visa</b>, software engineer intern<br>
+    <span class="when">Summer 2022</span><br>
+    A Spring Boot and React app that tracked 150+ internal applications and their dependencies.
+  </li>
+  <li>
+    <b>University of Houston</b>, BS in Computer Science<br>
+    <span class="when">May 2025, GPA 3.90</span>
+  </li>
+</ul>
+
+<footer>Updated October 2026.</footer>
+
+</main>
+</body>
+</html>
