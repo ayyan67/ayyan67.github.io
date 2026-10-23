@@ -66,6 +66,7 @@ h2 + .project { margin-top: 1.75rem; }
 
 figure { margin: 0.35rem 0; }
 .shot { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; }
+.shot-sm { max-width: 372px; }   /* small popups: shown at their real size */
 .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
 .phones img { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 14px; }
 
@@ -129,6 +130,35 @@ footer { margin-top: 4rem; color: var(--muted); font-size: 0.9375rem; }
   <p>I first built it for a university iOS course, then rebuilt it the way I’d want production code to look. Every service is injected through a protocol, so the test suite runs offline in under a second. Network calls have typed errors and backoff that never retries a rate limit, overlapping refreshes are merged into one, and prices stay on screen when a refresh fails. A debug screen shows p50 and p95 latency and the analytics event stream.</p>
   <p class="facts">Swift, SwiftUI, SwiftData, async/await, XCTest. Runs without an API key.</p>
   <p class="links"><a href="https://github.com/ayyan67/cryptosim">Source code</a></p>
+</article>
+
+<article class="project" id="local-llm-arc">
+  <h3>Local LLMs on an Intel Arc A770</h3>
+  <p class="what">Running a 35-billion-parameter model with vision and tool calling on a $300 GPU, and the notes on what it took.</p>
+  <p>Intel’s Arc cards are cheap for 16 GB of VRAM but poorly supported, so most of the work is finding out what actually runs. I settled on Qwen3.6-35B-A3B, a mixture-of-experts model whose experts offload cleanly to system RAM, at 64K context with image input and tool calling, generating at about 19 tokens a second. Along the way I found that Intel’s Vulkan driver advertises a cooperative-matrix extension that silently turns any prompt over about 10,000 tokens into garbage, matched it to open llama.cpp issues, and built the workaround into every launcher. I measured SYCL at twice Vulkan’s prompt-ingest speed but half its generation speed, and showed that a dense model must fit entirely in VRAM or throughput drops threefold. When Windows Update quietly rolled the driver back three versions and broke the SYCL build, the notes caught that too.</p>
+  <p>On top of it runs a Hermes agent, NousResearch’s open framework, reachable over Telegram, with three skills I wrote: a scored digest of new job postings, a read-only lookup of purchase receipts in Gmail, and a marketplace lister that drafts a listing from photos and stops before anything is posted. The pipeline spec draws the line between what the agent may do on its own and what waits for me.</p>
+  <p class="facts">llama.cpp (SYCL and Vulkan builds), Qwen3.6-35B-A3B, hermes-agent, ComfyUI on PyTorch XPU. Benchmark tables and raw logs are in the repo.</p>
+  <p class="links"><a href="https://github.com/ayyan67/local-llm-arc">Notes and source</a></p>
+</article>
+
+<article class="project" id="arc-whisper">
+  <h3>arc-whisper</h3>
+  <p class="what">Speech to text on an Intel Arc GPU: a 2024 PyTorch script, rebuilt in 2026 as two offline apps on whisper.cpp.</p>
+  <p>The first version ran OpenAI’s Whisper through Intel’s PyTorch extension to transcribe and translate Japanese audio. The new version compiles whisper.cpp with Intel’s SYCL toolchain and puts two apps on top. LocalFlow is push-to-talk dictation: hold a key, speak, release, and the text is pasted into whatever has focus. Its keyboard hook is 51 lines of C, because a Python hook stalls every keyboard on the system whenever the interpreter is busy, and the model unloads after ten idle minutes so it never fights a game for VRAM.</p>
+  <p>Scribe records meetings, transcribes them with large-v3, and labels who said what from the voices. On a four-person meeting from the AMI corpus it found all four speakers with 2.7% confusion where the library’s own clustering had 16%. A local Qwen pass then fixes misheard words, but every edit is diffed against what Whisper heard and rejected if it drops or rewrites more than a few words, after the model once tried to delete 18 words from a line. I also tested letting the model reassign speakers: all five of its changes were wrong, so speaker labels come from the audio only.</p>
+  <p class="facts">Python, C, whisper.cpp SYCL build, sherpa-onnx, Silero VAD. Nothing leaves the machine.</p>
+  <p class="links"><a href="https://github.com/ayyan67/arc-whisper">Source code</a></p>
+</article>
+
+<article class="project" id="prayer-reminder">
+  <h3>Prayer Reminder</h3>
+  <p class="what">A Windows tray app that reads the iqamah times your masjid publishes and tells you when to leave for the congregation.</p>
+  <figure><img class="shot" src="img/prayer-today.png" width="516" height="739" loading="lazy" alt="Prayer Reminder’s main window in dark mode: the date, a card reading “Next up: Asr 5:45 PM, in 1h 48m”, and a table of adhan and iqamah times for Fajr through Isha with Asr highlighted."></figure>
+  <p>I wrote it in C against Win32 directly, so it is one 270 KB executable with no runtime and no installer. It reads the JSON feed behind the Masjidal widget that most masjid websites embed, caches two weeks of times so it works offline and across midnight, and schedules today’s and tomorrow’s reminders so a 4:30 AM Fajr alert is queued before the day changes. The tick never fires a burst of stale alerts after the machine wakes from sleep. It handles Jumu’ah on Fridays, pauses from the tray, and snoozes from the popup. The popup is a per-pixel-alpha layered window with antialiased corners drawn without GDI+.</p>
+  <figure><img class="shot shot-sm" src="img/prayer-reminder.png" width="372" height="168" loading="lazy" alt="A compact dark reminder popup reading “In 20 minutes, Asr, Iqamah at 5:45 PM”, with Snooze 5m and Dismiss buttons."></figure>
+  <p>It ships pointed at my masjid in New Jersey, but any masjid on Masjidal works by editing three lines of config: the app notices the edit, reloads, and fetches the new times without a restart.</p>
+  <p class="facts">C11, Win32, WinHTTP, GDI. 3,300 lines, builds with one gcc command.</p>
+  <p class="links"><a href="https://github.com/ayyan67/prayer-reminder">Source code</a></p>
 </article>
 
 <article class="project" id="masha-studios">
