@@ -116,8 +116,17 @@ h2, .project { scroll-margin-top: 1.5rem; }
        display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; }
 .toc ul { list-style: none; margin: 0; padding: 0; display: contents; }
 .toc ul ul { display: none; }
-.toc a { color: inherit; text-decoration: none; }
+.toc a { color: inherit; text-decoration: none; display: inline-block; transition: color 150ms; }
 .toc a:hover { color: var(--link); text-decoration: underline; }
+.toc a.active { color: var(--ink); font-weight: 600; }
+.toc a.parent { color: var(--ink); }
+@keyframes toc-bump {
+  0%   { transform: translateX(0); }
+  40%  { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+.toc a.bump { animation: toc-bump 340ms cubic-bezier(0.2, 0.8, 0.3, 1.3); }
+@media (prefers-reduced-motion: reduce) { .toc a.bump { animation: none; } }
 .toc .label { margin-right: 0.3rem; }
 @media (min-width: 66rem) {
   .toc {
@@ -128,7 +137,11 @@ h2, .project { scroll-margin-top: 1.5rem; }
   .toc ul { display: block; }
   .toc > ul > li { margin-top: 0.55rem; }
   .toc ul ul { display: block; margin-top: 0.2rem; padding-left: 0.8rem; border-left: 1px solid var(--rule); }
-  .toc ul ul li { margin-top: 0.1rem; }
+  .toc ul ul li { margin-top: 0.1rem; position: relative; }
+  .toc ul ul li.on::before {
+    content: ""; position: absolute; left: calc(-0.8rem - 1px); top: 0.25em; bottom: 0.25em;
+    width: 2px; background: var(--accent); border-radius: 1px;
+  }
 }
 
 @media (max-width: 30rem) {
@@ -144,7 +157,7 @@ h2, .project { scroll-margin-top: 1.5rem; }
 
 <header class="intro">
   <h1>Ayyan Qamer</h1>
-  <p class="lede">I’m a software engineer. For the past year I worked on WhatsApp Payments at Meta, building iOS payment flows used by <span class="num">a few hundred million people</span>. Before that I spent two years as the only developer at a medical-billing startup. Most of what’s below I built on my own time, and most of it is in use.</p>
+  <p class="lede">I’m a software engineer. For the past year I built iOS payment flows for WhatsApp Payments at Meta, used by <span class="num">a few hundred million people</span>; before that I spent two years as the only developer at a medical-billing startup. Most of what’s below I built on my own time, and most of it is in use.</p>
   <p>I’m looking for my next full-time role. Email is the quickest way to reach me.</p>
   <p class="contact">
     <a href="mailto:ayyanqamer@gmail.com" id="email" title="Click to copy">ayyanqamer@gmail.com</a>
@@ -161,12 +174,12 @@ h2, .project { scroll-margin-top: 1.5rem; }
     <li><a href="#projects">Projects</a>
       <ul>
         <li><a href="#pagerlite">Pagerlite</a></li>
-        <li><a href="#islamic-bank">Islamic Bank</a></li>
-        <li><a href="#local-llm-arc">Local LLMs on Arc</a></li>
-        <li><a href="#arc-whisper">arc-whisper</a></li>
         <li><a href="#prayer-reminder">Prayer Reminder</a></li>
         <li><a href="#masha-studios">Masha Studios</a></li>
         <li><a href="#cryptosim">CryptoSim</a></li>
+        <li><a href="#islamic-bank">Islamic Bank</a></li>
+        <li><a href="#local-llm-arc">Local LLMs on Arc</a></li>
+        <li><a href="#arc-whisper">arc-whisper</a></li>
       </ul>
     </li>
     <li><a href="#smaller">Smaller things</a></li>
@@ -178,12 +191,12 @@ h2, .project { scroll-margin-top: 1.5rem; }
   <li>
     <b>Meta</b>, software engineer, WhatsApp Payments<br>
     <span class="when">July 2025 to May 2026</span><br>
-    Owned payment features from the GraphQL layer to the iOS UI. Built the recovery flow for people blocked by transaction limits, which rescued <span class="num">more than 11 million stalled payment sessions</span>. Traced a silent gap in error telemetry to two misconfigured feature flags that had been hiding payment errors for <span class="num">about 70 million users</span>. Shipped peer-to-peer payment reminders end to end as the only engineer on them.
+    Owned payment features from the GraphQL layer to the iOS UI. Built the recovery flow for people blocked by transaction limits, which rescued <span class="num">more than 11 million stalled payment sessions</span>, and traced a silent telemetry gap to two misconfigured feature flags that had hidden payment errors for <span class="num">about 70 million users</span>.
   </li>
   <li>
     <b>Astra Medical</b>, lead developer<br>
     <span class="when">September 2023 to December 2025</span><br>
-    Sole developer at a medical-billing startup. I built the claims pipeline: Claude on AWS Bedrock reads scanned superbills, a biller confirms each extracted field, and the app generates 837P claim files, sends them to the clearinghouse over SFTP, and reads back the payment reports. Claims that used to take <span class="num">two weeks went out in under ten minutes</span>. The code belongs to the company, so it isn’t public. <a href="https://www.astramedical.co">astramedical.co</a>
+    Sole developer at a medical-billing startup. Built the claims pipeline: Claude on AWS Bedrock reads scanned superbills, a biller confirms each field, and the app generates 837P claims, sends them to the clearinghouse over SFTP, and reads back the payment reports. Claims that used to take <span class="num">two weeks went out in under ten minutes</span>; the code belongs to the company. <a href="https://www.astramedical.co">astramedical.co</a>
   </li>
   <li>
     <b>Verizon</b>, machine learning engineer intern<br>
@@ -207,60 +220,17 @@ h2, .project { scroll-margin-top: 1.5rem; }
   <h3>Pagerlite</h3>
   <p class="what">An on-call assistant that investigates an outage, proposes a fix, and only runs it after a person says yes.</p>
   <figure><img class="shot" src="img/pagerlite.jpg" width="1400" height="851" alt="Pagerlite asking for approval to roll back a bad deploy of checkout-api, with the tool calls it made shown above and an incident timeline on the right."></figure>
-  <p>The model can read metrics, logs, deploys and feature flags freely. The only way it can change anything is through one tool, and that tool blocks until a human approves. An approved fix runs as a durable workflow: apply the change, watch the service, revert on its own if it doesn’t recover. Each resolved incident is saved as a postmortem the agent searches the next time something similar happens.</p>
-  <p>The servers are simulated, so you can click through the demo without breaking anything.</p>
+  <p>The model reads metrics, logs, deploys and feature flags freely, but the only way it can change anything is one tool that blocks until a human approves. An approved fix runs as a durable workflow that applies the change, watches the service, and reverts on its own if it doesn’t recover. The servers are simulated, so the demo is safe to click through.</p>
   <p class="facts"><span class="tag">TypeScript</span><span class="tag">Cloudflare Workers AI (Llama 3.3 70B)</span><span class="tag">Agents SDK</span><span class="tag">Workflows</span><span class="tag">Durable Objects</span><span class="note"><span class="num">39 unit tests</span>.</span></p>
   <p class="links"><a href="https://pagerlite.ayyanqamer.workers.dev">Try the live demo</a> <a href="https://github.com/ayyan67/pagerlite">Source code</a></p>
-</article>
-
-<article class="project" id="islamic-bank">
-  <h3>Islamic Bank</h3>
-  <p class="what">The economy bot for muslim.chat, a large Muslim community on Discord: wallets, savings, prayer check-ins with streaks, trivia and a shop.</p>
-  <p>The server had run its economy on NadekoBot since 2018, and I replaced it. The migration moved <span class="num">85,000 users and 383,000 old ledger rows</span> across without anyone losing a balance. Every coin movement is an append-only ledger entry, written so that a retried command can’t pay out twice. Since February 2026 it has recorded <span class="num">about 252,000 transactions and 13,000 prayer check-ins</span>. Releases go from GitHub Actions to a VPS as immutable builds with a one-step rollback, and the database is backed up nightly.</p>
-  <p class="facts"><span class="tag">TypeScript</span><span class="tag">Seyfert</span><span class="tag">SQLite</span><span class="tag">Vitest</span><span class="tag">GitHub Actions</span><span class="note">In production since February 2026, <span class="num">193 commits</span>.</span></p>
-  <p class="links"><a href="https://github.com/ayyan67/islamic-bank-bot">Source code</a></p>
-</article>
-
-<article class="project" id="local-llm-arc">
-  <h3>Local LLMs on an Intel Arc A770</h3>
-  <p class="what">A 35-billion-parameter model with vision and tool calling, running on a $300 GPU, and notes on everything that broke.</p>
-  <p>I bought an Arc A770 because 16 GB of VRAM was cheap. Intel’s software support is not, so most of this project was finding out what actually runs. The model that stuck is Qwen3.6-35B-A3B, a mixture-of-experts model whose experts spill into system RAM without the speed collapsing. It runs at <span class="num">64K context</span> with image input and tool calling, generating <span class="num">about 19 tokens a second</span>.</p>
-  <p>Things I measured rather than read:</p>
-  <ul class="points">
-    <li>Intel’s Vulkan driver advertises a cooperative-matrix extension that silently turns any prompt over <span class="num">about 10,000 tokens</span> into garbage. I matched it to two open llama.cpp issues and built the workaround into every launcher.</li>
-    <li>SYCL ingests prompts twice as fast as Vulkan but generates at half the speed, so each launcher picks the backend that suits its job.</li>
-    <li>A dense model has to fit entirely in VRAM. The same 24B model ran at <span class="num">5 tokens a second at 13.4 GB</span> and <span class="num">14 at 11.9 GB</span>. Mixture-of-experts models don’t have this problem.</li>
-    <li>Windows Update rolled the driver back three versions one night and broke the SYCL build. The notes record which driver and Level Zero versions work.</li>
-  </ul>
-  <p>The model is the brain of a Hermes agent (NousResearch’s framework) that I talk to over Telegram. I wrote three skills for it: a scored digest of new job postings, a read-only receipt lookup in Gmail, and a marketplace lister that drafts a listing from photos and stops before posting. The spec is mostly about where the agent stops and I take over.</p>
-  <p class="facts"><span class="tag">llama.cpp (SYCL and Vulkan builds)</span><span class="tag">Qwen3.6-35B-A3B</span><span class="tag">hermes-agent</span><span class="tag">ComfyUI on PyTorch XPU</span><span class="note">Benchmark tables and raw logs are in the repo.</span></p>
-  <p class="links"><a href="https://github.com/ayyan67/local-llm-arc">Notes and source</a></p>
-</article>
-
-<article class="project" id="arc-whisper">
-  <h3>arc-whisper</h3>
-  <p class="what">Speech to text on the same GPU: a 2024 PyTorch script, rebuilt in 2026 as two offline apps on whisper.cpp.</p>
-  <p>The first version ran OpenAI’s Whisper through Intel’s PyTorch extension to transcribe and translate Japanese audio. That extension is end-of-life now, so the new version compiles whisper.cpp with Intel’s SYCL toolchain and puts two apps on top.</p>
-  <p><b>LocalFlow</b> is push-to-talk dictation: hold a key, talk, let go, and the text lands in whatever window has focus. The keyboard hook is <span class="num">51 lines of C</span> because a hook installed from Python stalls every keyboard on the system whenever the interpreter is busy. The model unloads after ten idle minutes so it never fights a game for VRAM.</p>
-  <p><b>Scribe</b> records meetings, transcribes them with large-v3, and labels who said what from the voices. On a four-person meeting from the AMI corpus it found all four speakers with <span class="num">2.7% confusion</span>; the library’s built-in clustering had <span class="num">16%</span>. A local Qwen pass then fixes misheard words, but every edit is diffed against what Whisper heard and thrown out if it drops or rewrites more than a few words. I added that check after the model tried to delete <span class="num">18 words</span> from one line.</p>
-  <p>I also tried letting the model reassign speakers. <span class="num">All five of its changes were wrong</span>, so speaker labels come from the audio only.</p>
-  <p class="facts"><span class="tag">Python</span><span class="tag">C</span><span class="tag">whisper.cpp SYCL build</span><span class="tag">sherpa-onnx</span><span class="tag">Silero VAD</span><span class="note">Nothing leaves the machine.</span></p>
-  <p class="links"><a href="https://github.com/ayyan67/arc-whisper">Source code</a></p>
 </article>
 
 <article class="project" id="prayer-reminder">
   <h3>Prayer Reminder</h3>
   <p class="what">A Windows tray app that reads the iqamah times your masjid publishes and tells you when to leave.</p>
   <figure><img class="shot shot-md" src="img/prayer-today.png" width="516" height="739" loading="lazy" alt="Prayer Reminder’s main window in dark mode: the date, a card reading “Next up: Asr 5:45 PM, in 1h 48m”, and a table of adhan and iqamah times for Fajr through Isha with Asr highlighted."></figure>
-  <p>My masjid posts its times on its website and I kept missing the walk over, so I wrote this. It’s C against Win32 directly: <span class="num">one 270 KB executable</span>, no runtime, no installer.</p>
-  <ul class="points">
-    <li>Reads the JSON feed behind the Masjidal widget that most masjid sites embed, and caches <span class="num">two weeks of times</span> so it works offline and across midnight.</li>
-    <li>Schedules today’s and tomorrow’s reminders together, so a <span class="num">4:30 AM Fajr</span> alert is queued before the date changes. After the machine wakes from sleep it drops anything stale instead of firing a burst of old alerts.</li>
-    <li>Fridays swap Dhuhr for whichever Jumu’ah you attend. Pause it from the tray, snooze it from the popup.</li>
-    <li>The popup is a per-pixel-alpha layered window with properly antialiased corners, drawn without GDI+.</li>
-  </ul>
+  <p>My masjid posts its times on its website and I kept missing the walk over, so I wrote this in C against Win32: <span class="num">one 270 KB executable</span>, no runtime, no installer. It reads the JSON feed behind the Masjidal widget, caches <span class="num">two weeks of times</span> so it works offline, queues tomorrow’s Fajr before midnight, and swaps Dhuhr for Jumu’ah on Fridays. Any masjid on Masjidal works with a three-line config change, and the app notices the edit and reloads without a restart.</p>
   <figure><img class="shot shot-sm" src="img/prayer-reminder.png" width="372" height="168" loading="lazy" alt="A compact dark reminder popup reading “In 20 minutes, Asr, Iqamah at 5:45 PM”, with Snooze 5m and Dismiss buttons."></figure>
-  <p>It ships pointed at my masjid in New Jersey, but any masjid on Masjidal works with a three-line config change. The app notices the edit, reloads, and fetches the new times without a restart.</p>
   <p class="facts"><span class="tag">C11</span><span class="tag">Win32</span><span class="tag">WinHTTP</span><span class="tag">GDI</span><span class="note"><span class="num">About 3,300 lines</span>, builds with one gcc command.</span></p>
   <p class="links"><a href="https://github.com/ayyan67/prayer-reminder">Source code</a></p>
 </article>
@@ -269,7 +239,7 @@ h2, .project { scroll-margin-top: 1.5rem; }
   <h3>Masha Studios</h3>
   <p class="what">The online store for my sister’s clothing label. It takes real orders.</p>
   <figure><img class="shot" src="img/masha.jpg" width="1400" height="851" loading="lazy" alt="The Masha Studios home page: the headline “Modest, and effortlessly chic.” next to a photo of a model in a printed two-piece."></figure>
-  <p>There’s no database. Stock for each size is worked out from paid, unrefunded Stripe Checkout sessions, so a webhook delivered twice can’t count a sale twice. The browser only says which items and sizes are in the bag; the server sets the prices. I verify Stripe’s webhook signatures myself, handle payment methods that settle later such as Klarna and Affirm, and send the order email only after replying to Stripe, so a slow email can’t trigger a retry.</p>
+  <p>There’s no database: stock for each size is worked out from paid, unrefunded Stripe Checkout sessions, so a webhook delivered twice can’t count a sale twice. The browser only says which items and sizes are in the bag, and the server sets the prices. I verify Stripe’s webhook signatures myself, handle payment methods that settle later such as Klarna and Affirm, and send the order email only after replying to Stripe.</p>
   <p class="facts"><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">Stripe Checkout</span><span class="tag">Resend</span><span class="tag">Vercel</span></p>
   <p class="links"><a href="https://mashastudios.com">mashastudios.com</a></p>
 </article>
@@ -282,9 +252,33 @@ h2, .project { scroll-margin-top: 1.5rem; }
     <img src="img/cs-2.jpg" width="414" height="900" loading="lazy" alt="Bitcoin detail screen with a one-week price chart and the user’s position.">
     <img src="img/cs-4.jpg" width="414" height="900" loading="lazy" alt="Portfolio screen showing a $10,005.12 balance, available cash and holdings.">
   </figure>
-  <p>It started as a university iOS project. I rebuilt it the way I’d want production code to look: every service is injected through a protocol, so the test suite runs <span class="num">offline in under a second</span>. Network calls have typed errors and a backoff that never retries a rate limit, overlapping refreshes are merged into one, and prices stay on screen when a refresh fails. A debug screen shows p50 and p95 latency and the analytics event stream.</p>
+  <p>It started as a university iOS project, and I rebuilt it the way I’d want production code to look. Every service is injected through a protocol, so the test suite runs <span class="num">offline in under a second</span>; network calls have typed errors and a backoff that never retries a rate limit, and prices stay on screen when a refresh fails. A debug screen shows p50 and p95 latency and the analytics event stream.</p>
   <p class="facts"><span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">SwiftData</span><span class="tag">async/await</span><span class="tag">XCTest</span><span class="note">Runs without an API key.</span></p>
   <p class="links"><a href="https://github.com/ayyan67/cryptosim">Source code</a></p>
+</article>
+
+<article class="project" id="islamic-bank">
+  <h3>Islamic Bank</h3>
+  <p class="what">The economy bot for muslim.chat, a large Muslim community on Discord: wallets, savings, prayer check-ins with streaks, trivia and a shop.</p>
+  <p>The server had run its economy on NadekoBot since 2018, and I replaced it: the migration moved <span class="num">85,000 users and 383,000 old ledger rows</span> across without anyone losing a balance. Every coin movement is an append-only ledger entry, written so a retried command can’t pay out twice. Since February 2026 it has recorded <span class="num">about 252,000 transactions and 13,000 prayer check-ins</span>, with releases shipping from GitHub Actions to a VPS as immutable builds with one-step rollback.</p>
+  <p class="facts"><span class="tag">TypeScript</span><span class="tag">Seyfert</span><span class="tag">SQLite</span><span class="tag">Vitest</span><span class="tag">GitHub Actions</span><span class="note">In production since February 2026, <span class="num">193 commits</span>.</span></p>
+  <p class="links"><a href="https://github.com/ayyan67/islamic-bank-bot">Source code</a></p>
+</article>
+
+<article class="project" id="local-llm-arc">
+  <h3>Local LLMs on an Intel Arc A770</h3>
+  <p class="what">A 35-billion-parameter model with vision and tool calling, running on a $300 GPU, and notes on everything that broke.</p>
+  <p>I bought an Arc A770 because 16 GB of VRAM was cheap, and most of this project was working out what actually runs on it. The answer is Qwen3.6-35B-A3B, a mixture-of-experts model, at <span class="num">64K context</span> with image input and tool calling at <span class="num">about 19 tokens a second</span>, once I’d found a Vulkan driver bug that silently corrupts any prompt over <span class="num">about 10,000 tokens</span> and learned that a dense model has to fit entirely in VRAM or lose <span class="num">two thirds</span> of its speed. It also powers a Hermes agent I talk to over Telegram, with three skills I wrote: a scored job-posting digest, a read-only Gmail receipt lookup, and a marketplace lister that drafts from photos and stops before posting.</p>
+  <p class="facts"><span class="tag">llama.cpp (SYCL and Vulkan builds)</span><span class="tag">Qwen3.6-35B-A3B</span><span class="tag">hermes-agent</span><span class="tag">ComfyUI on PyTorch XPU</span><span class="note">Benchmark tables and raw logs are in the repo.</span></p>
+  <p class="links"><a href="https://github.com/ayyan67/local-llm-arc">Notes and source</a></p>
+</article>
+
+<article class="project" id="arc-whisper">
+  <h3>arc-whisper</h3>
+  <p class="what">Speech to text on the same GPU: a 2024 PyTorch script, rebuilt in 2026 as two offline apps on whisper.cpp.</p>
+  <p>The 2024 version ran Whisper through Intel’s PyTorch extension; the new one compiles whisper.cpp with Intel’s SYCL toolchain and puts two apps on top. LocalFlow is push-to-talk dictation whose keyboard hook is <span class="num">51 lines of C</span>, because a hook installed from Python stalls every keyboard on the system whenever the interpreter is busy. Scribe records meetings and labels who said what from the voices (all four speakers found on a four-person AMI corpus meeting, <span class="num">2.7% confusion</span> against <span class="num">16%</span> for the library’s own clustering), then runs a local Qwen proofreading pass in which every edit is checked against what Whisper heard.</p>
+  <p class="facts"><span class="tag">Python</span><span class="tag">C</span><span class="tag">whisper.cpp SYCL build</span><span class="tag">sherpa-onnx</span><span class="tag">Silero VAD</span><span class="note">Nothing leaves the machine.</span></p>
+  <p class="links"><a href="https://github.com/ayyan67/arc-whisper">Source code</a></p>
 </article>
 
 <h2 id="smaller">Smaller things</h2>
@@ -303,6 +297,40 @@ h2, .project { scroll-margin-top: 1.5rem; }
 
 <script>
 (function () {
+  // Contents: mark the section under the reader, and nudge the item when it changes.
+  var links = [].slice.call(document.querySelectorAll('.toc a[href^="#"]'));
+  var targets = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+  var projects = document.querySelector('.toc a[href="#projects"]');
+  var current = -1, ticking = false;
+  function update() {
+    ticking = false;
+    var idx = -1, line = window.innerHeight * 0.3;
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i] && targets[i].getBoundingClientRect().top <= line) idx = i;
+    }
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 2) idx = targets.length - 1;
+    if (idx === current) return;
+    current = idx;
+    links.forEach(function (a, i) {
+      var on = (i === idx);
+      a.classList.toggle('active', on);
+      a.parentNode.classList.toggle('on', on);
+      if (on) { a.classList.remove('bump'); void a.offsetWidth; a.classList.add('bump'); }
+    });
+    var inProject = idx >= 0 && targets[idx].classList.contains('project');
+    projects.classList.toggle('parent', inProject);
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  // A click on the contents list should light up that item immediately, even
+  // if an image below is still loading and the page shifts under it.
+  window.addEventListener('hashchange', function () {
+    var i = links.findIndex(function (a) { return a.getAttribute('href') === location.hash; });
+    if (i >= 0) { current = -2; setTimeout(update, 0); }
+  });
+  update();
+
   var link = document.getElementById('email');
   var toast = document.getElementById('toast');
   var hide;
