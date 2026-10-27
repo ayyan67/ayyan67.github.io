@@ -176,7 +176,7 @@ h2, .project { scroll-margin-top: 1.5rem; }
 <header class="intro">
   <h1>Ayyan Qamer</h1>
   <p class="lede">I’m a software engineer. Until May 2026 I built iOS payment flows for WhatsApp Payments at Meta, used by <span class="num">hundreds of millions of people</span>, and for two years I was lead developer at a medical-billing startup. Most of what’s below I built on my own time, and most of it is in use.</p>
-  <p>I’m looking for my next full-time role. Email is the quickest way to reach me.</p>
+  <p>I’m looking for my next full-time role.</p>
   <p class="contact">
     <a href="mailto:ayyanqamer@gmail.com" id="email" title="Click to copy">ayyanqamer@gmail.com</a>
     <a href="https://github.com/ayyan67">GitHub</a>
@@ -219,12 +219,12 @@ h2, .project { scroll-margin-top: 1.5rem; }
   <li>
     <b>Verizon</b>, machine learning engineer intern<br>
     <span class="when">Summer 2024</span><br>
-    Coverage-prediction models and the Kafka and Spark pipelines feeding them, on data from <span class="num">over 100,000 cell towers</span>.
+    Coverage-prediction models on data from <span class="num">over 100,000 cell towers</span>.
   </li>
   <li>
     <b>Visa</b>, software engineer intern<br>
     <span class="when">Summer 2022</span><br>
-    A Spring Boot and React app that tracked <span class="num">150 internal applications</span> and their dependencies.
+    An internal tool that tracked <span class="num">150 applications</span> and their dependencies.
   </li>
   <li>
     <b>University of Houston</b>, BS in Computer Science<br>
@@ -247,9 +247,9 @@ h2, .project { scroll-margin-top: 1.5rem; }
   <h3>Prayer Reminder</h3>
   <p class="what">A Windows tray app that reads the iqamah times your masjid publishes and tells you when to leave.</p>
   <figure><img class="shot shot-md" src="img/prayer-today.png" width="516" height="739" loading="lazy" alt="Prayer Reminder’s main window in dark mode: the date, a card reading “Next up: Asr 5:45 PM, in 1h 48m”, and a table of adhan and iqamah times for Fajr through Isha with Asr highlighted."></figure>
-  <p>I kept missing the walk over, so I wrote this in C against Win32: <span class="num">one 270 KB executable</span>, no installer. It caches <span class="num">two weeks of times</span> so it works offline, swaps Dhuhr for Jumu’ah on Fridays, and works for any masjid on Masjidal with a three-line config change.</p>
+  <p>Written in C against Win32: <span class="num">one 270 KB executable</span>, no installer. It caches <span class="num">two weeks of times</span> so it works offline, and swaps Dhuhr for Jumu’ah on Fridays.</p>
   <figure><img class="shot shot-sm" src="img/prayer-reminder.png" width="372" height="168" loading="lazy" alt="A compact dark reminder popup reading “In 20 minutes, Asr, Iqamah at 5:45 PM”, with Snooze 5m and Dismiss buttons."></figure>
-  <p class="facts"><span class="tag">C11</span><span class="tag">Win32</span><span class="tag">WinHTTP</span><span class="tag">GDI</span><span class="note"><span class="num">About 3,300 lines</span>, builds with one gcc command.</span></p>
+  <p class="facts"><span class="tag">C11</span><span class="tag">Win32</span><span class="tag">WinHTTP</span><span class="tag">GDI</span><span class="note"><span class="num">About 3,300 lines</span>.</span></p>
   <p class="links"><a href="https://github.com/ayyan67/prayer-reminder">Source code</a></p>
 </article>
 
@@ -257,7 +257,7 @@ h2, .project { scroll-margin-top: 1.5rem; }
   <h3>Masha Studios</h3>
   <p class="what">The online store for my sister’s clothing label. It takes real orders.</p>
   <figure><img class="shot" src="img/masha.jpg" width="1400" height="851" loading="lazy" alt="The Masha Studios home page: the headline “Modest, and effortlessly chic.” next to a photo of a model in a printed two-piece."></figure>
-  <p>There’s no database: stock is worked out from paid Stripe sessions, so a webhook delivered twice can’t count a sale twice. The server sets every price, and it handles payment methods that settle later, like Klarna and Affirm.</p>
+  <p>There’s no database: stock is worked out from paid Stripe sessions, so a webhook delivered twice can’t count a sale twice.</p>
   <p class="facts"><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">Stripe Checkout</span><span class="tag">Resend</span><span class="tag">Vercel</span></p>
   <p class="links"><a href="https://mashastudios.com">mashastudios.com</a></p>
 </article>
@@ -270,15 +270,15 @@ h2, .project { scroll-margin-top: 1.5rem; }
     <img src="img/cs-2.jpg" width="414" height="900" loading="lazy" alt="Bitcoin detail screen with a one-week price chart and the user’s position.">
     <img src="img/cs-4.jpg" width="414" height="900" loading="lazy" alt="Portfolio screen showing a $10,005.12 balance, available cash and holdings.">
   </figure>
-  <p>It started as a university project, and I rebuilt it the way I’d want production code to look. Every service is injected through a protocol, so the tests run <span class="num">offline in under a second</span>, and prices stay on screen when a refresh fails.</p>
+  <p>A university project rebuilt the way I’d want production code to look. Every service is injected through a protocol, so the tests run <span class="num">offline in under a second</span>.</p>
   <p class="facts"><span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">SwiftData</span><span class="tag">async/await</span><span class="tag">XCTest</span><span class="note">Runs without an API key.</span></p>
   <p class="links"><a href="https://github.com/ayyan67/cryptosim">Source code</a></p>
 </article>
 
 <article class="project" id="islamic-bank">
   <h3>Islamic Bank</h3>
-  <p class="what">The economy bot for muslim.chat, a large Muslim community on Discord: wallets, savings, prayer check-ins with streaks, trivia and a shop.</p>
-  <p>It replaced NadekoBot, and I migrated <span class="num">85,000 users and 383,000 ledger rows</span> without anyone losing a balance. Since February 2026 it has recorded <span class="num">about 252,000 transactions</span>, each an append-only ledger entry that a retried command can’t pay out twice.</p>
+  <p class="what">The economy bot for muslim.chat, a large Muslim community on Discord.</p>
+  <p>It replaced NadekoBot, and I migrated <span class="num">85,000 users and 383,000 ledger rows</span> without anyone losing a balance. Each of the <span class="num">252,000 transactions</span> since is an append-only ledger entry that a retried command can’t pay out twice.</p>
   <p class="facts"><span class="tag">TypeScript</span><span class="tag">Seyfert</span><span class="tag">SQLite</span><span class="tag">Vitest</span><span class="tag">GitHub Actions</span><span class="note">In production since February 2026.</span></p>
   <p class="links"><a href="https://github.com/ayyan67/islamic-bank-bot">Source code</a></p>
 </article>
@@ -301,8 +301,8 @@ h2, .project { scroll-margin-top: 1.5rem; }
 
 <h2 id="smaller">Smaller things</h2>
 <ul class="small">
-  <li><a href="https://github.com/ayyan67/arabic-learner">Arabic Learner</a>. Learn the Arabic of the daily prayers word by word, with spaced repetition and Anki export.</li>
-  <li><a href="https://github.com/ayyan67/snapmark">snapmark</a>. A screenshot annotator I rewrote from Tauri into a native Mac app in Zig. It opens in <span class="num">123 ms instead of 202 ms</span> and uses about a third of the memory.</li>
+  <li><a href="https://github.com/ayyan67/arabic-learner">Arabic Learner</a>. Learn the Arabic of the daily prayers, with spaced repetition and Anki export.</li>
+  <li><a href="https://github.com/ayyan67/snapmark">snapmark</a>. A screenshot annotator rewritten from Tauri into native Zig. It opens in <span class="num">123 ms instead of 202 ms</span>, on a third of the memory.</li>
   <li><a href="https://github.com/ayyan67/ticktick-mcp">ticktick-mcp</a>. An MCP server that lets Claude read and manage my TickTick tasks. I use it every day.</li>
   <li><a href="https://github.com/ayyan67/linkedinFilter">linkedinFilter</a>. A userscript that hides reposted, promoted and stale job posts on LinkedIn.</li>
 </ul>
