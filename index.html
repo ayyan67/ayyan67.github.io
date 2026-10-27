@@ -25,7 +25,7 @@
 <meta name="description" content="Ayyan Qamer, software engineer. Previously WhatsApp Payments at Meta and lead developer at Astra Medical. Work history and projects.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..450&display=swap">
 <style>
 /* One narrow reading column, left-aligned, like a letter. Whitespace separates
    things; the only boxes are the screenshots, because they are pictures of other screens. */
@@ -55,11 +55,15 @@
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
+/* Big 1x monitors: a little larger type, and the rem-based column grows with it. */
+@media (min-width: 1600px) { html { font-size: 18px; } }
+@media (min-width: 2200px) { html { font-size: 19px; } }
 body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font: 400 1.0625rem/1.62 var(--serif);
+  /* 450, not 400: this variable serif renders thin on Windows at 1x. */
+  font: 450 1.0625rem/1.62 var(--serif);
   font-optical-sizing: auto;
   padding-left: max(20px, env(safe-area-inset-left, 0px));
   padding-right: max(20px, env(safe-area-inset-right, 0px));
